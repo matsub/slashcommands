@@ -22,6 +22,8 @@ def not_allowed(request):
 class SlashCommands:
 
     def __init__(self, token, prefix='/'):
+        self.routes = dict()
+
         # setting japronto up
         app = Application()
         self.app = app
@@ -40,14 +42,15 @@ class SlashCommands:
         return token == self.token
 
     def get_routes(self):
-        for route in self.router._routes:
-            yield route.pattern, route.handler
+        return self.routes.items()
 
     def add_route(self, pattern, handler):
-        patterns = starmap(lambda p, h: p, self.get_routes())
-        if pattern in patterns:
-            raise RouteDuplicated(
-                "You have already defined `{0}'".format(pattern))
+        if pattern in self.routes:
+            msg = "You have already defined `{0}'".format(pattern)
+            raise RouteDuplicated(msg)
+
+        # register the route
+        self.routes[pattern] = handler
         self.router.add_route(pattern, handler, method='POST')
         self.router.add_route(pattern, not_allowed, method='GET')
 
