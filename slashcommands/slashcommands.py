@@ -15,6 +15,8 @@ def error_handler(request, exception):
     return request.Response(code=code, json={'detail': text})
 
 
+def not_allowed(request):
+    return request.Response(code=405, text='Method Not Allowed')
 
 
 class SlashCommands:
@@ -47,6 +49,7 @@ class SlashCommands:
             raise RouteDuplicated(
                 "You have already defined `{0}'".format(pattern))
         self.router.add_route(pattern, handler, method='POST')
+        self.router.add_route(pattern, not_allowed, method='GET')
 
     def route(self, path):
         def _route(f):
