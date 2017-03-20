@@ -25,15 +25,19 @@ class TestResponse(unittest.TestCase):
     def test_post(self):
         data = {'token': TOKEN}
         expectations = [
-            ('/hello/', "hello!"),
-            ('/hello/foo', "foo!"),
-            ('/sub/', "I'm sub app!"),
+            ('/hello/', {"text": "hello!", "response_type": "ephemeral"}),
+            ('/hello/foo', {"text": "foo!", "response_type": "in_channel"}),
+            ('/sub/', {
+                "text": "I'm subapp!",
+                "attachments": [{"text": "Partly cloudy today and tomorrow"}]
+            }),
         ]
 
         for url, ans in expectations:
             res = self.client.post(url, data)
             self.assertEqual(res.status, 200)
-            self.assertEqual(res.read().decode(), ans)
+            res_json = json.loads(res.read().decode())
+            self.assertEqual(res_json, ans)
 
     def test_404(self):
         data = {'token': TOKEN}
