@@ -39,6 +39,10 @@ if __name__ == '__main__':
 
 and run it on your server.
 
+The argument `body` is the request from slack.  This is typed as a `dict`
+object.  See the [Documentation of Slack](https://api.slack.com/slash-commands#how_do_commands_work)
+for the structure of this request.
+
 
 ## Using modules
 As your program gets longer, you may want to split it into several files.
