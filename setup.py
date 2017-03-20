@@ -18,7 +18,7 @@ setup(
     author_email='matsub.rk@gmail.com',
 
     # include all packages
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'wercker.yml']),
     include_package_data=True,
 
     install_requires=[
