@@ -1,10 +1,7 @@
 # coding: utf-8
 
 from itertools import starmap
-from japronto import (
-    Application,
-    RouteNotFoundException,
-)
+from japronto import Application
 from .errors import (
     InvalidRequest,
     InvalidToken,
@@ -18,13 +15,15 @@ def error_handler(request, exception):
     return request.Response(code=code, json={'detail': text})
 
 
-def not_found(request, exception):
-    return request.Response(code=404, text='')
+def not_allowed(request):
+    return request.Response(code=405, text='Method Not Allowed')
 
 
 class SlashCommands:
 
     def __init__(self, token, prefix='/'):
+        self.routes = dict()
+
         # setting japronto up
         app = Application()
         self.app = app
@@ -38,21 +37,22 @@ class SlashCommands:
         # default Error handlers
         self.app.add_error_handler(InvalidRequest, error_handler)
         self.app.add_error_handler(InvalidToken, error_handler)
-        self.app.add_error_handler(RouteNotFoundException, not_found)
 
     def is_valid(self, token):
         return token == self.token
 
     def get_routes(self):
-        for route in self.router._routes:
-            yield route.pattern, route.handler
+        return self.routes.items()
 
     def add_route(self, pattern, handler):
-        patterns = starmap(lambda p, h: p, self.get_routes())
-        if pattern in patterns:
-            raise RouteDuplicated(
-                "You have already defined `{0}'".format(pattern))
+        if pattern in self.routes:
+            msg = "You have already defined `{0}'".format(pattern)
+            raise RouteDuplicated(msg)
+
+        # register the route
+        self.routes[pattern] = handler
         self.router.add_route(pattern, handler, method='POST')
+        self.router.add_route(pattern, not_allowed, method='GET')
 
     def route(self, path):
         def _route(f):
