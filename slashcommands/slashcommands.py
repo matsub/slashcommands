@@ -19,6 +19,17 @@ def not_allowed(request):
     return request.Response(code=405, text='Method Not Allowed')
 
 
+def format_response(res):
+    if isinstance(res, dict):
+        return res
+    else:
+        response = {
+            "text": res,
+            "response_type": "ephemeral",
+        }
+        return response
+
+
 class SlashCommands:
 
     def __init__(self, token, prefix='/'):
@@ -57,17 +68,21 @@ class SlashCommands:
     def route(self, path):
         def _route(f):
             def __route(*args, **kwargs):
+                # get request that exactly formal
                 request = args[0]
                 body = request.form
                 if (body is None) or ('token' not in body):
                     raise InvalidRequest
 
+                # verify token
                 token = body['token']
                 if not self.is_valid(token):
                     raise InvalidToken
 
-                response = f(body)
-                return request.Response(text=response)
+                # response
+                res = f(body)
+                response = format_response(res)
+                return request.Response(json=response)
 
             # add route
             pattern = self.prefix, path.lstrip('/')

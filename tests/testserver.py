@@ -16,12 +16,20 @@ def hello(body):
 
 @app.route('/foo')
 def hello2(body):
-    return "foo!"
+    response = {
+        "text": "foo!",
+        "response_type": "in_channel",
+    }
+    return response
 
 
 @subapp.route('/')
 def foo(body):
-    return "I'm sub app!"
+    response = {
+        "text": "I'm subapp!",
+        "attachments": [{"text": "Partly cloudy today and tomorrow"}]
+    }
+    return response
 
 
 app.install(subapp)
