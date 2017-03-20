@@ -28,9 +28,13 @@ def hello(body):
     return "hello!"
 
 
-@app.route('/foo')
+@app.route('/hey')
 def foo(body):
-    return "foo!"
+    response = {
+        "text": "What'up @{0} !!".format(body['user_name']),
+        "response_type": "in_channel",
+    }
+    return response
 
 
 if __name__ == '__main__':
