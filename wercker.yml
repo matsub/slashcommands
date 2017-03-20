@@ -1,0 +1,10 @@
+box: python:3.6-slim
+build:
+  steps:
+    - pip-install
+    - script:
+      name: execute python test
+      code: |
+        python setup.py install
+        python tests/testserver.py &
+        nosetests
