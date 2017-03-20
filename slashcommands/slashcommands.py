@@ -1,10 +1,7 @@
 # coding: utf-8
 
 from itertools import starmap
-from japronto import (
-    Application,
-    RouteNotFoundException,
-)
+from japronto import Application
 from .errors import (
     InvalidRequest,
     InvalidToken,
@@ -18,8 +15,6 @@ def error_handler(request, exception):
     return request.Response(code=code, json={'detail': text})
 
 
-def not_found(request, exception):
-    return request.Response(code=404, text='')
 
 
 class SlashCommands:
@@ -38,7 +33,6 @@ class SlashCommands:
         # default Error handlers
         self.app.add_error_handler(InvalidRequest, error_handler)
         self.app.add_error_handler(InvalidToken, error_handler)
-        self.app.add_error_handler(RouteNotFoundException, not_found)
 
     def is_valid(self, token):
         return token == self.token
