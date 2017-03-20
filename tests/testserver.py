@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
-sys.path.append('../slashcommands')
-
 from slashcommands import SlashCommands
 
 TOKEN = 'test'
