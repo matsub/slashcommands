@@ -25,8 +25,8 @@ class TestResponse(unittest.TestCase):
     def test_post(self):
         data = {'token': TOKEN}
         expectations = [
-            ('/hello/', {"text": "hello!", "response_type": "ephemeral"}),
-            ('/hello/foo', {"text": "foo!", "response_type": "in_channel"}),
+            ('/hello/', {"text": "hello!", "response_type": "in_channel"}),
+            ('/hello/foo', {"text": "foo!", "response_type": "ephemeral"}),
             ('/sub/', {
                 "text": "I'm subapp!",
                 "attachments": [{"text": "Partly cloudy today and tomorrow"}]

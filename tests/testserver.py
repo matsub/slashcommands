@@ -18,7 +18,7 @@ def hello(body):
 def hello2(body):
     response = {
         "text": "foo!",
-        "response_type": "in_channel",
+        "response_type": "ephemeral",
     }
     return response
 
