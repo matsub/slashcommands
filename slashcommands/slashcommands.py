@@ -25,7 +25,7 @@ def format_response(res):
     else:
         response = {
             "text": res,
-            "response_type": "ephemeral",
+            "response_type": "in_channel",
         }
         return response
 
