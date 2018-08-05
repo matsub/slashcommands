@@ -21,7 +21,8 @@ setup(
     packages=find_packages(exclude=['tests', 'wercker.yml']),
     include_package_data=True,
 
+    python_requires='>=3.6',
     install_requires=[
-        'japronto==0.1.1',
+        'sanic==0.7.0',
     ],
 )

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from itertools import starmap
-from japronto import Application
+from sanic import Sanic
 from .errors import (
     InvalidRequest,
     InvalidToken,
@@ -36,9 +36,8 @@ class SlashCommands:
         self.routes = dict()
 
         # setting japronto up
-        app = Application()
+        app = Sanic()
         self.app = app
-        self.router = app.router
         self.run = self.app.run
 
         # settings for slash commands
