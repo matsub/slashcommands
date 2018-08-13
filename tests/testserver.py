@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from os.path import (
+    abspath,
+    dirname,
+)
 import sys
+
+this_path = abspath(__file__)
+module_path = dirname(dirname(this_path))
+sys.path.append(module_path)
+
+
 from slashcommands import SlashCommands
 
 TOKEN = 'test'

@@ -1,22 +1,13 @@
 # coding: utf-8
 
-from itertools import starmap
 from sanic import Sanic
+from sanic.response import json
 from .errors import (
     InvalidRequest,
     InvalidToken,
     RouteDuplicated,
+    init_handler,
 )
-
-
-def error_handler(request, exception):
-    code = exception.code
-    text = exception.__doc__
-    return request.Response(code=code, json={'detail': text})
-
-
-def not_allowed(request):
-    return request.Response(code=405, text='Method Not Allowed')
 
 
 def format_response(res):
@@ -36,17 +27,14 @@ class SlashCommands:
         self.routes = dict()
 
         # setting japronto up
-        app = Sanic()
+        error_handler=init_handler()
+        app = Sanic(error_handler=init_handler())
         self.app = app
         self.run = self.app.run
 
         # settings for slash commands
         self.token = token
         self.prefix = prefix.rstrip('/')
-
-        # default Error handlers
-        self.app.add_error_handler(InvalidRequest, error_handler)
-        self.app.add_error_handler(InvalidToken, error_handler)
 
     def is_valid(self, token):
         return token == self.token
@@ -61,27 +49,27 @@ class SlashCommands:
 
         # register the route
         self.routes[pattern] = handler
-        self.router.add_route(pattern, handler, method='POST')
-        self.router.add_route(pattern, not_allowed, method='GET')
+        self.app.add_route(handler, pattern, methods=frozenset({'POST'}))
 
     def route(self, path):
         def _route(f):
-            def __route(*args, **kwargs):
+            async def __route(*args, **kwargs):
                 # get request that exactly formal
                 request = args[0]
                 body = request.form
+                print(body)
                 if (body is None) or ('token' not in body):
                     raise InvalidRequest
 
                 # verify token
-                token = body['token']
+                token = body['token'][0]
                 if not self.is_valid(token):
                     raise InvalidToken
 
                 # response
                 res = f(body)
                 response = format_response(res)
-                return request.Response(json=response)
+                return json(response)
 
             # add route
             pattern = self.prefix, path.lstrip('/')
