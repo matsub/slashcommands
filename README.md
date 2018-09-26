@@ -6,7 +6,7 @@ A tiny framework for slash commands of Slack.
 
 # Installation
 
-with Python 3.5+
+with Python 3.6+
 
 ```sh
 $ pip install slashcommands

@@ -9,7 +9,7 @@
 '''
 
 __author__ = 'matsub'
-__version__ = '0.3'
+__version__ = '0.4'
 __license__ = 'MIT'
 
 from .slashcommands import SlashCommands
