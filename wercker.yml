@@ -1,4 +1,4 @@
-box: python:3.6-slim
+box: python:3.7.0-stretch
 build:
   steps:
     - pip-install

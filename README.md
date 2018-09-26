@@ -6,11 +6,11 @@ A tiny framework for slash commands of Slack.
 
 # Installation
 
+with Python 3.5+
+
 ```sh
 $ pip install slashcommands
 ```
-
-And I recommend you the version of Python is over 3.5 at least.
 
 
 # Usage
