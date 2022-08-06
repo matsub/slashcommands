@@ -23,6 +23,6 @@ setup(
 
     python_requires='>=3.6',
     install_requires=[
-        'sanic==0.7.0',
+        'sanic==20.12.7',
     ],
 )
